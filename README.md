@@ -43,7 +43,9 @@ pip install scBiMapping
 
 *n_embedding_2nd: numbe of embeddings in the 2nd time dimension reduction: None (n_embedding will be used) or a value specfied by users;*
 
-*CellType_Key_for_ref*: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);*
+*CellType_Key_for_ref*: key in adata_ref.obs that stores the cell type labels of the reference cells* (**IMPORTANT!!!**);
+
+# Tutorials
 
 
 
