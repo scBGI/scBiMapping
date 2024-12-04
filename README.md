@@ -16,7 +16,7 @@ pip install scBiMapping
 * Input: 
   * adata: anndata format (cell-feature sparse matrix is stored in adata.X);   
 
-  * n_embedding: an integer, denoting the number of embeddings (default to 30);
+  * n_embedding: an integer, denoting the number of embeddings (default to 30; slight adjustment may lead to better performance in practice);
 
   * normalization: whether to normalize each embedded vector to norm one (default to True);*
 
@@ -35,7 +35,7 @@ pip install scBiMapping
     * adata_ref = adata_ref[:,intersection_feature]
     * adata_query = adata_query[:,intersection_feature]
 
-  * n_embedding: an integer, denoting the number of embeddings (default to 30);  
+  * n_embedding: an integer, denoting the number of embeddings (default to 30; slight adjustment may lead to better performance in practice);  
 
   * normalization: whether to normalize each embedded vector to norm one (default to True);  
 
