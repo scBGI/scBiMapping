@@ -29,7 +29,11 @@ pip install scBiMapping
 * Input: 
   * adata_ref: referenc dataset (anndata format);
 
-  * adata_query: query dataset (anndata format); 
+  * adata_query: query dataset (anndata format); **Note: the feature set of reference and query datasets should be the same, by using the following setttings for instance**
+ 
+    * intersection_feature = list(set(adata_ref.var_names) & set(adata_query.var_names))
+    * adata_ref = adata_ref[:,intersection_feature]
+    * adata_query = adata_query[:,intersection_feature]
 
   * n_embedding: an integer, denoting the number of embeddings (default to 30);  
 
