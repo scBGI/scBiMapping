@@ -23,7 +23,7 @@ pip install scBiMapping
 * Output:
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
 
-## Task 2: cell type annotation
+## Task 2: reference-based cell type annotation
 **scBiMapping.scBiMapping_annotation(adata_ref,adata_query,n_embedding = 30,normalization = True, K = 5, K_majority = 5, knnMethod = 'HNSW',reduction_method_on_cells_only = 'BiMapping',metric = 'euclidean',n_embedding_2nd = None, CellType_Key_for_ref = 'cell_annotation')**  
 
 * Input: 
@@ -56,7 +56,9 @@ pip install scBiMapping
  * Output:
    * the predicted cell types for all query cells are stored in adata_query.obs['cell_type_predicted']
 
-# Tutorials
+## Tutorials for tasks 1 and 2
+
+**We provide 8 tutorials to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; see details at https://cloud.stomics.tech/library/#/tool/detail/workspace_notebook/NB0120241204Yng3Pn/--?zone=sz**
 
 
 
