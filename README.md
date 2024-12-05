@@ -4,7 +4,9 @@ Fast and Accurate Non-linear Dimensionality Reduction and Cell Annotation for La
 # install 
 pip install scBiMapping
 
-*note: the source code has not yet been uploaded (we will upload it once our paper is published); the currently uploaded codes have been compiled in python 3.11, and thus to run the package in python 3.11 is necessary)*
+*note1: the source code has not yet been uploaded (we will upload it once our paper is published); the currently uploaded codes have been compiled in python 3.11, and thus to run the package in python 3.11 is necessary).*
+
+*note 2: if you are a BGIer, you can directly use the public image (named scBiMapping) on the cloud platform.*
 
 # how to use 
 *there are two major functions in scBiMapping: scBiMapping_DR and scBiMapping_annotation*
