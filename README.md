@@ -60,7 +60,7 @@ pip install scBiMapping
 
 ## Tutorials for tasks 1 and 2
 
-**We provide 8 tutorials to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; see details at https://cloud.stomics.tech/library/#/tool/detail/workspace_notebook/NB0120241204Yng3Pn/--?zone=sz**
+We provide 8 tutorials to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; see details at https://cloud.stomics.tech/library/#/tool/detail/workspace_notebook/NB0120241204Yng3Pn/--?zone=sz
 
 
 
