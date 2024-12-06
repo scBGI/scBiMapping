@@ -13,7 +13,7 @@ pip install scBiMapping
  
 ## Task 1: Dimension reduction
 
-**scBiMapping.scBiMapping_DR(adata,n_embedding = 30, normalization = True):**
+**scBiMapping_DR(adata,n_embedding = 30, normalization = True):**
 
 * Input: 
   * adata: anndata format (cell-feature sparse matrix is stored in adata.X);   
@@ -26,7 +26,7 @@ pip install scBiMapping
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
 
 ## Task 2: reference-based cell type annotation
-**scBiMapping.scBiMapping_annotation(adata_ref,adata_query,n_embedding = 30,normalization = True, K = 5, K_majority = 5, knnMethod = 'HNSW',reduction_method_on_cells_only = 'BiMapping',metric = 'euclidean',n_embedding_2nd = None, CellType_Key_for_ref = 'cell_annotation')**  
+**scBiMapping_annotation(adata_ref,adata_query,n_embedding = 30,normalization = True, K = 5, K_majority = 5, knnMethod = 'HNSW',reduction_method_on_cells_only = 'BiMapping',metric = 'euclidean',n_embedding_2nd = None, CellType_Key_for_ref = 'cell_annotation')**  
 
 * Input: 
   * adata_ref: referenc dataset (anndata format);
@@ -53,7 +53,7 @@ pip install scBiMapping
 
   * n_embedding_2nd: numbe of embeddings in the 2nd time dimension reduction: None (n_embedding will be used) or a value specfied by users;
 
-  * CellType_Key_for_ref*: key in adata_ref.obs that stores the cell type labels of the reference cells* (**IMPORTANT!!!**);
+  * CellType_Key_for_ref*: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);
 
  * Output:
    * the predicted cell types for all query cells are stored in adata_query.obs['cell_type_predicted']
