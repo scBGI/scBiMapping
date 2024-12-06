@@ -9,7 +9,7 @@ pip install scBiMapping
 *note 2: if you are a BGIer, you can directly use the public image (named scBiMapping) on the cloud platform.*
 
 # how to use 
-*there are two major functions in scBiMapping: scBiMapping_DR and scBiMapping_annotation*
+There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMapping_annotation**, corresponding to the following two tasks
  
 ## Task 1: Dimension reduction
 
