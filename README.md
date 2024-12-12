@@ -9,18 +9,18 @@ pip install scBiMapping
 *note 2: if you are a BGIer, you can directly use the public image (named scBiMapping) on the cloud platform.*
 
 # how to use 
-There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMapping_annotation**, corresponding to the following two tasks
+There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMapping_annotation**, corresponding to the following two tasks.
  
 ## Task 1: Dimension reduction
 
 **scBiMapping_DR(adata,n_embedding = 30, normalization = True):**
 
 * Input: 
-  * adata: anndata format (cell-feature sparse matrix is stored in adata.X);   
+  * adata: [anndata format](https://anndata.readthedocs.io/en/latest/tutorials/notebooks/getting-started.html) (cell-feature sparse matrix is stored in adata.X);   
 
   * n_embedding: an integer, denoting the number of embeddings (default to 30; slight adjustment may lead to better performance in practice);
 
-  * normalization: whether to normalize each embedded vector to norm one (default to True);*
+  * normalization: whether to normalize each embedded vector to norm one (default to True);
 
 * Output:
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
@@ -53,7 +53,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 
   * n_embedding_2nd: numbe of embeddings in the 2nd time dimension reduction: None (n_embedding will be used) or a value specfied by users;
 
-  * CellType_Key_for_ref*: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);
+  * CellType_Key_for_ref: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);
 
  * Output:
    * the predicted cell types for all query cells are stored in adata_query.obs['cell_type_predicted']
