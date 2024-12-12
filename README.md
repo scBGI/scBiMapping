@@ -1,5 +1,5 @@
 # scBiMapping
-Fast and Accurate Non-linear Dimensionality Reduction and Cell Annotation for Large Single-Cell Datasets
+Fast and Accurate Non-linear Dimensionality Reduction and Cell Annotation for Large and High-dimensional Single-Cell Datasets
 
 # install 
 pip install scBiMapping
