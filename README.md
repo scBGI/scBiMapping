@@ -1,14 +1,14 @@
 # scBiMapping
 Fast and Accurate Non-linear Dimensionality Reduction and Cell Annotation for Large and High-dimensional Single-Cell Datasets
 
-# install 
+# Install 
 pip install scBiMapping
 
 *note1: the source code has not yet been uploaded (we will upload it once our paper is published); the currently uploaded codes have been compiled in python 3.11, and thus to run the package in python 3.11 is necessary).*
 
 *note 2: if you are a BGIer, you can directly use the public image (named scBiMapping) on the cloud platform.*
 
-# how to use 
+# How to use 
 There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMapping_annotation**, corresponding to the following two tasks.
  
 ## Task 1: Dimension reduction
@@ -29,9 +29,9 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 **scBiMapping_annotation(adata_ref,adata_query,n_embedding = 30, K = 30, K_majority = 10, CellType_Key_for_ref = 'cell_annotation', knnMethod = 'HNSW',normalization = True, reduction_method_on_cells_only = 'BiMapping',metric = 'euclidean',n_embedding_2nd = None)**  
 
 * Input: 
-  * adata_ref: referenc dataset (anndata format);
+  * **adata_ref**: referenc dataset (anndata format);
 
-  * adata_query: query dataset (anndata format); **Note: the feature set of reference and query datasets should be the same, by using the following setttings for instance**
+  * **adata_query**: query dataset (anndata format); **Note: the feature set of reference and query datasets should be the same, by using the following setttings for instance**
  
     * intersection_feature = list(set(adata_ref.var_names) & set(adata_query.var_names))
     * adata_ref = adata_ref[:,intersection_feature]
