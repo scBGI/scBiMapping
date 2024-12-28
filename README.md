@@ -62,6 +62,8 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 
 We provide 8 demos to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; see details at https://cloud.stomics.tech/library/#/tool/detail/workspace_notebook/NB0120241204Yng3Pn/--?zone=sz
 
+## Scripts to reproduce primary experimental results
 
+See the corresponding files in this github. 
 
 
