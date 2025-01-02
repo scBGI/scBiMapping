@@ -64,6 +64,5 @@ We provide 8 demos to further demonstrate how to conduct dimension reduction and
 
 ## Scripts to reproduce primary experimental results
 
-See the corresponding files in this github. 
-
+See the corresponding files in this github. See also reproducible program in codeOcean: https://codeocean.com/capsule/3904732/tree.
 
