@@ -60,7 +60,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 
 ## Tutorials for tasks 1 and 2
 
-We provide 8 demos to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; Details can be found in the Tutorials folder.
+We provide 8 demos to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; Details can be found in the Tutorials folder and https://nbviewer.org/github/scBGI/scBiMapping/tree/main/Turtorials.
 
 ## Scripts to reproduce primary experimental results
 
