@@ -13,14 +13,12 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
  
 ## Task 1: Dimension reduction
 
-**scBiMapping_DR(adata,n_embedding = 30, normalization = True):**
+**scBiMapping_DR(adata,n_embedding = 30):**
 
 * Input: 
   * adata: [anndata format](https://anndata.readthedocs.io/en/latest/tutorials/notebooks/getting-started.html) (cell-feature sparse matrix is stored in adata.X);   
 
   * n_embedding: an integer, denoting the number of embeddings (default to 30; slight adjustment may lead to better performance in practice);
-
-  * normalization: whether to normalize each embedded vector to norm one (default to True);
 
 * Output:
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
@@ -60,7 +58,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 
 ## Tutorials for tasks 1 and 2
 
-We provide 8 demos to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; Details can be found in the Tutorials folder and https://nbviewer.org/github/scBGI/scBiMapping/tree/main/Turtorials.
+We provide several demos to further demonstrate how to conduct dimension reduction and reference-based cell type annotation using scBiMapping; Details can be found in the Tutorials folder and https://nbviewer.org/github/scBGI/scBiMapping/tree/main/Turtorials.
 
 ## Scripts to reproduce primary experimental results
 
