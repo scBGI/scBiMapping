@@ -18,7 +18,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
 * Input: 
   * adata: [anndata format](https://anndata.readthedocs.io/en/latest/tutorials/notebooks/getting-started.html) (cell-feature sparse matrix is stored in adata.X);   
 
-  * n_embedding: an integer, denoting the number of embeddings (default to 30; slight adjustment may lead to better performance in practice);
+  * n_embedding: an integer, denoting embedding dimensions (default to 30; slight adjustment may lead to better performance in practice);
 
 * Output:
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
