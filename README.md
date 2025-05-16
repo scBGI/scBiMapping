@@ -13,7 +13,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
  
 ## Task 1: Dimension reduction
 
-**scBiMapping_DR(adata,n_embedding = 30):**
+**scBiMapping_DR(adata,n_embedding):**
 
 * Input: 
   * adata: [anndata format](https://anndata.readthedocs.io/en/latest/tutorials/notebooks/getting-started.html) (cell-feature sparse matrix is stored in adata.X);   
@@ -24,9 +24,9 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
   * Embedded matrix is stored in adata.obsm['U'], where each row denotes the embedded vector of one cell;
 
 ## Task 2: reference-based cell type annotation
-**scBiMapping_annotation(adata_ref,adata_query,n_embedding = 30, K = 30, K_majority = 10, CellType_Key_for_ref = 'cell_annotation', knnMethod = 'HNSW',normalization = True, reduction_method_on_cells_only = 'BiMapping',metric = 'euclidean',n_embedding_2nd = None)**  
+**scBiMapping_annotation(adata_ref,adata_query,n_embedding, K, K_majority, CellType_Key_for_ref)**  
 
-* Input: 
+* Key Inputs: 
   * **adata_ref**: referenc dataset (anndata format);
 
   * **adata_query**: query dataset (anndata format); **Note: the feature set of reference and query datasets should be the same, by using the following setttings for instance**
@@ -42,17 +42,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
   * **K_majority**: an integer, denoting how many reference cells are used for majority voting (default to 10; adjustment may be needed in practice);
  
   * **CellType_Key_for_ref**: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);
-
-  * knnMethod: fast k-nearest neighbor searching method: 'HNSW' (default) or 'NNDescent' (recommended as well);
- 
-  * normalization: whether to normalize each embedded vector to norm one (default to True); 
-
-  * reduction_method_on_cells_only: dimension reduction on the new representation in the embedded space: 'BiMapping' (default) or 'None';
-
-  * metric: metric in the embedded space: 'euclidean' (default),'cosine', or, 'ip';
-
-  * n_embedding_2nd: numbe of embeddings in the 2nd time dimension reduction: None (n_embedding will be used) or a value specfied by users;
-
+  * 
  * Output:
    * the predicted cell types for all query cells are stored in adata_query.obs['cell_type_predicted']
 
