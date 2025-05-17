@@ -42,7 +42,7 @@ There are two major functions in scBiMapping, **scBiMapping_DR** and **scBiMappi
   * **K_majority**: an integer, denoting how many reference cells are used for majority voting (default to 10; adjustment may be needed in practice);
  
   * **CellType_Key_for_ref**: key in adata_ref.obs that stores the cell type labels of the reference cells (**IMPORTANT!!!**);
-  * 
+ 
  * Output:
    * the predicted cell types for all query cells are stored in adata_query.obs['cell_type_predicted']
 
