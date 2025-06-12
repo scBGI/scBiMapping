@@ -56,7 +56,8 @@ adata_ref.obs['subclass'] = cell_annotation['SubClass'].values  # 23 types
 n_embedding = 30; 
 K = 30; # this parameter will heavily influence the speed. Don't be too large
 K_majority = 30; # parameter for marjority voting
- 
+knnMethod = 'HNSW';
+
 adata_ref.obs['cell_annotation'] = adata_ref.obs['subclass'].values 
 
 adata_query.obs['cell_type'] = scBiMapping_annotation(adata_ref, adata_query,n_embedding = n_embedding,K = K,K_majority = K_majority,knnMethod = knnMethod)
