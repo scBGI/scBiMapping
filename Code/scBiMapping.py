@@ -131,9 +131,14 @@ def scBiMapping_annotation(
     K = int(K)
     K_majority = int(K_majority)
     
+    if adata_ref.n_vars != adata_query.n_vars:
+        intersection_feature = list(set(adata_ref.var_names) & set(adata_query.var_names))
+        adata_ref = adata_ref[:,intersection_feature]
+        adata_query = adata_query[:,intersection_feature]
+    
     # Step 1: Compute embeddings for reference and query
-    scBiMapping_DR(adata_ref,n_embedding = n_embedding, normalization = normalization)
-    scBiMapping_DR(adata_query,n_embedding = n_embedding, normalization = normalization)
+    scBiMapping_DR(adata_ref,n_embedding = n_embedding)
+    scBiMapping_DR(adata_query,n_embedding = n_embedding)
     
     # Step 2: Compute similarity matrices and merge
     knn_based_Sim_ref = knn_search_weighted(adata_ref, K, knnMethod,metric)
@@ -165,7 +170,7 @@ def scBiMapping_annotation(
     # Step 5: Find nearest neighbors and predict cell types by majority voting
     if reduction_method_on_cells_only == 'None':
         print('when reduction_method_on_cells_only is None, NNDescent is recommended, which supports sparse input')   
-    nnIndex, dis = knn_search(query_dataset = adata_query.obsm['knn_based_Sim_query'], index_dataset = adata_ref.obsm['knn_based_Sim_ref'], K = K_majority, knnMethod = knnMethod)
+    nnIndex, dis = knn_search(query_dataset = adata_query.obsm['knn_based_Sim_query'], index_dataset = adata_ref.obsm['knn_based_Sim_ref'], K = K_majority, knn_method = knnMethod)
     
     print('Performing majority voting...')
     if isinstance(CellType_Key_for_ref,str):  
@@ -179,6 +184,214 @@ def scBiMapping_annotation(
         raise TypeError("Unsupported type for count_elements function")
         
     return celltype_predicted
+
+def scBiMapping_annotation_v2(
+    adata_ref,
+    adata_query,
+    n_embedding: int = 30,
+    K: int = 30,
+    K_majority: int = 10,
+    knnMethod: str = 'HNSW',
+    normalization: bool = True,
+    reduction_method_on_cells_only: str = 'BiMapping',
+    metric: str = 'euclidean',
+    n_embedding_2nd: Optional[int] = None,
+    CellType_Key_for_ref: Union[str, List[str]] = 'cell_annotation'
+) -> List[str]:
+    """
+    Perform cell type annotation using scBiMapping approach.
+    
+    Parameters:
+    -----------
+    adata_ref : AnnData
+        Reference dataset with known cell types
+    adata_query : AnnData
+        Query dataset to be annotated
+    n_embedding : int
+        Dimension of the embedding space (default: 30)
+    K : int
+        Number of nearest neighbors to find (default: 30)
+    K_majority : int
+        Number of neighbors for majority voting (default: 10)
+    knnMethod : str
+        KNN search method ('HNSW' or 'NNDescent') (default: 'HNSW')
+    normalization : bool
+        Whether to normalize embeddings (default: True)
+    reduction_method_on_cells_only : str
+        Dimensionality reduction method ('BiMapping' or 'None') (default: 'BiMapping')
+    metric : str
+        Distance metric for KNN search (default: 'euclidean')
+    n_embedding_2nd : Optional[int]
+        Alternative embedding dimension if needed (default: None)
+    CellType_Key_for_ref : Union[str, List[str]]
+        Key(s) for cell type annotations in adata_ref.obs (default: 'cell_annotation')
+        
+    Returns:
+    --------
+    List[str]
+        Predicted cell types for query cells
+    """
+    
+    # Print parameters
+    print(f'n_embedding: {n_embedding}')
+    print(f'K: {K}')
+    print(f'K_majority: {K_majority}')
+ 
+    # Ensure integer parameters
+    K = int(K)
+    K_majority = int(K_majority)
+    
+    if adata_ref.n_vars != adata_query.n_vars:
+        intersection_feature = list(set(adata_ref.var_names) & set(adata_query.var_names))
+        adata_ref = adata_ref[:,intersection_feature]
+        adata_query = adata_query[:,intersection_feature]
+        
+    # Step 1: Compute embeddings for reference and query
+    scBiMapping_DR(adata_ref,n_embedding = n_embedding)
+    scBiMapping_DR(adata_query,n_embedding = n_embedding)
+    
+    # Step 2: Compute similarity matrices and merge
+    knn_based_Sim_ref = knn_search_weighted(adata_ref, K, knnMethod,metric)
+    knn_based_Sim_query = knn_search_weighted(adata_query, K, knnMethod,metric) 
+    
+
+    # Step 3: Dimensionality reduction
+    print(f'\nPerforming dimensionality reduction using {reduction_method_on_cells_only}...')
+    if reduction_method_on_cells_only == 'BiMapping':
+        print('\nDirect merge softmax-weight coded reference and query dataset......')
+        knn_based_Sim_both_ref_query = sparse.vstack((knn_based_Sim_ref, knn_based_Sim_query)) 
+        n_embedding_final = n_embedding_2nd if n_embedding_2nd is not None else n_embedding
+        U = BiTcut_embedding_v5_matrix_form(
+            knn_based_Sim_both_ref_query,
+            n_embedding=n_embedding_final,
+            normalization=normalization
+        )
+        adata_ref.obsm['knn_based_Sim_ref'],adata_query.obsm['knn_based_Sim_query'] = U[:knn_based_Sim_ref.shape[0],:],U[knn_based_Sim_ref.shape[0]:,:]  
+        nnIndex, dis = knn_search(query_dataset = adata_query.obsm['knn_based_Sim_query'], index_dataset = adata_ref.obsm['knn_based_Sim_ref'], K = K_majority, knn_method = knnMethod)
+    elif reduction_method_on_cells_only == 'None': 
+        print('when reduction_method_on_cells_only is None, NNDescent is recommended, which supports sparse input')
+        knnMethod = 'NNDescent'
+        nnIndex, dis = knn_search(query_dataset = knn_based_Sim_query, index_dataset = knn_based_Sim_ref, K = K_majority, knn_method = knnMethod)
+    else:
+        raise ValueError(f"Unsupported reduction method: {reduction_method_on_cells_only}")
+                                    
+                                 
+    print(f'Reference shape: {adata_ref.obsm["knn_based_Sim_ref"].shape}')
+    print(f'Query shape: {adata_query.obsm["knn_based_Sim_query"].shape}')
+    
+     
+    # Step 5: Find nearest neighbors and predict cell types by majority voting 
+    print('Performing majority voting...')
+    if isinstance(CellType_Key_for_ref,str):  
+        celltype_predicted = pd.DataFrame(np.array(adata_ref.obs[CellType_Key_for_ref])[nnIndex]).apply(find_most_frequent_np, axis=1).tolist()
+        adata_query.obs['cell_type_predicted'] = celltype_predicted
+    elif isinstance(CellType_Key_for_ref,list):
+        for i in range(len(CellType_Key_for_ref)):
+            celltype_predicted = pd.DataFrame(np.array(adata_ref.obs[CellType_Key_for_ref[i]])[nnIndex]).apply(find_most_frequent_np, axis=1).tolist()
+            adata_query.obs['cell_type_predicted' + str(i+1)] = celltype_predicted
+    else:
+        raise TypeError("Unsupported type for count_elements function")
+        
+    return celltype_predicted
+
+def scBiMapping_batch_correction(
+    adata: ad.AnnData,
+    batch_key: str = 'batch',
+    n_embedding: int = 30,
+    K: int = 30, 
+    knn_method: str = 'HNSW',
+    normalization: bool = True,
+    reduction_method: str = 'BiMapping',
+    metric: str = 'euclidean',
+    n_embedding_2nd: Optional[int] = None
+) -> ad.AnnData:
+    """
+    Perform batch effect correction on multi-batch single-cell data using scBiMapping.
+    
+    This function integrates multiple batches by learning a joint embedding space while 
+    preserving biological variations and removing technical batch effects.
+
+    Parameters:
+    -----------
+    adata : AnnData
+        Annotated data matrix containing cells from multiple batches
+    batch_key : str
+        Key in adata.obs that identifies different batches (default: 'batch')
+    n_embedding : int
+        Dimension of the embedding space (default: 30)
+    K : int
+        Number of nearest neighbors to use for graph construction (default: 30)
+    knn_method : str
+        KNN search method, either 'HNSW' or 'NNDescent' (default: 'HNSW')
+    normalization : bool
+        Whether to L2-normalize the embeddings (default: True)
+    reduction_method : str
+        Dimensionality reduction method ('BiMapping' or 'None') (default: 'BiMapping')
+    metric : str
+        Distance metric for KNN search (default: 'euclidean')
+    n_embedding_2nd : Optional[int]
+        Alternative embedding dimension for second reduction step (default: None)
+
+    Returns:
+    --------
+    AnnData
+        Returns the modified AnnData object with batch-corrected embeddings stored in:
+        - obsm['batch_corrected_embeddings']: Joint embeddings after batch correction
+    """
+    
+    # Validate input parameters
+    if batch_key not in adata.obs:
+        raise ValueError(f"Batch key '{batch_key}' not found in adata.obs")
+    
+    print(f"\nStarting batch correction with parameters:")
+    print(f"- Embedding dimensions: {n_embedding} (primary), {n_embedding_2nd} (secondary)")
+    print(f"- Nearest neighbors: K={K}")
+    print(f"- KNN method: {knn_method}")
+    print(f"- Reduction method: {reduction_method}\n")
+    
+    # Initialize container for merged similarity matrices
+    knn_based_sim_list = []
+    batch_labels = adata.obs[batch_key].unique()
+    
+    # Process each batch separately
+    for i, batch in enumerate(batch_labels):
+        print(f"Processing batch {i+1}/{len(batch_labels)}: {batch}")
+        
+        # Subset the current batch
+        batch_mask = adata.obs[batch_key] == batch
+        adata_batch = adata[batch_mask, :].copy()
+        
+        # Compute batch-specific embeddings and similarity matrix
+        scBiMapping_DR(adata_batch, n_embedding=n_embedding)
+        sim_matrix = knn_search_weighted(adata_batch, K=K, knn_method=knn_method, metric=metric)
+        knn_based_sim_list.append(sim_matrix)
+        
+        # Clean up memory
+        del adata_batch, sim_matrix
+    
+    # Combine similarity matrices from all batches
+    print("\nMerging similarity matrices from all batches...")
+    knn_based_sim_combined = sparse.vstack(knn_based_sim_list)
+    
+    # Perform final dimensionality reduction
+    print(f"\nPerforming final dimensionality reduction using {reduction_method}...")
+    if reduction_method == 'BiMapping':
+        n_embedding_final = n_embedding_2nd if n_embedding_2nd is not None else n_embedding
+        corrected_embeddings = BiTcut_embedding_v5_matrix_form(
+            knn_based_sim_combined,
+            n_embedding=n_embedding_final,
+            normalization=normalization
+        )
+    elif reduction_method == 'None':
+        corrected_embeddings = knn_based_sim_combined
+    else:
+        raise ValueError(f"Unsupported reduction method: {reduction_method}")
+    
+    # Store results in the original AnnData object
+    adata.obsm['batch_corrected_embeddings'] = corrected_embeddings
+    print("\nBatch correction completed successfully.")
+    
+    return adata
     
 def knn_search_weighted(adata, K, knn_method='HNSW',metric = 'euclidean'):
     """
